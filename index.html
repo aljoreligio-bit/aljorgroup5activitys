@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Science Project - Group 5: Challenge 5 Philippine Tectonic Activities</title>
+    <style>
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            margin: 0; 
+            background-color: #03050b; 
+            color: #ffffff; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            overflow: hidden; 
+            user-select: none;
+        }
+
+        /* Cinematic Red Intro Overlay */
+        #netflix-intro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000000;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease;
+        }
+
+        .netflix-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transform: scale(0.7);
+            opacity: 0;
+            animation: netflixZoom 2.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+
+        /* Group 5 Red Styling (Netflix Red) */
+        .group-text {
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            font-size: clamp(3rem, 10vw, 5rem);
+            color: #e50914;
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(229, 9, 20, 0.8);
+        }
+
+        /* Glowing Red Slash */
+        .nike-slash {
+            width: clamp(50px, 15vw, 90px);
+            height: clamp(50px, 15vw, 90px);
+            border-top: 10px solid #e50914;
+            border-right: 10px solid transparent;
+            border-radius: 0 50% 0 0;
+            transform: rotate(45deg) skewX(-20deg);
+            filter: drop-shadow(0 0 15px #e50914);
+            animation: slashPulse 1.5s infinite alternate;
+        }
+
+        /* ENJOY Button (Red Theme) */
+        .start-enjoy-btn {
+            margin-top: 35px;
+            background: #e50914;
+            color: #ffffff;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 0 25px rgba(229, 9, 20, 0.6);
+            transition: all 0.2s ease;
+            opacity: 0;
+            animation: fadeInText 1.5s ease 0.8s forwards;
+        }
+
+        .start-enjoy-btn:hover, .start-enjoy-btn:active {
+            background: #ff1e1e;
+            transform: scale(1.08);
+            box-shadow: 0 0 35px rgba(255, 30, 30, 0.9);
+        }
+
+        @keyframes netflixZoom {
+            0% { transform: scale(0.4); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeInText {
+            to { opacity: 1; }
+        }
+
+        @keyframes slashPulse {
+            0% { filter: drop-shadow(0 0 10px #e50914); }
+            100% { filter: drop-shadow(0 0 25px #ff1e1e); }
+        }
+
+        /* Presentation Title Banner */
+        #header-banner {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 100;
+            pointer-events: none;
+            background: rgba(15, 23, 42, 0.85);
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 1px solid #38bdf8;
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
+            width: 92%;
+            max-width: 550px;
+        }
+        #header-banner h2 { margin: 0 0 3px 0; color: #38bdf8; font-size: clamp(0.9rem, 2.5vw, 1.2rem); letter-spacing: 0.5px; }
+        #header-banner p { margin: 0; font-size: clamp(10px, 1.8vw, 12px); color: #94a3b8; }
+
+        /* Dynamic Description Panel */
+        #info-panel {
+            position: absolute;
+            top: 85px;
+            left: 20px;
+            width: 340px;
+            max-width: calc(100vw - 40px);
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid #38bdf8;
+            padding: 16px;
+            border-radius: 14px;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            display: none;
+        }
+        #info-panel h3 { color: #38bdf8; margin-top: 0; font-size: 1rem; margin-bottom: 6px; }
+        #info-panel p { color: #cbd5e1; font-size: 12px; line-height: 1.5; margin-bottom: 0; }
+
+        @media (max-width: 768px) {
+            #info-panel {
+                top: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 92%;
+                padding: 12px;
+            }
+        }
+
+        /* Interactive Control Buttons Panel */
+        #controls { 
+            position: absolute; 
+            bottom: 20px; 
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            z-index: 100; 
+            background: rgba(15, 23, 42, 0.9);
+            padding: 12px 20px;
+            border-radius: 14px;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            width: 95vw;
+            max-width: 600px;
+        }
+        button.ctrl-btn { 
+            background: #1e293b; 
+            color: #f8fafc; 
+            border: 1px solid #475569; 
+            padding: 9px 14px; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            font-size: 12px;
+            flex: 1;
+            min-width: 105px;
+            transition: all 0.2s ease;
+        }
+        button.ctrl-btn:hover, button.ctrl-btn:active { 
+            background: #38bdf8; 
+            color: #060913;
+            border-color: #38bdf8;
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+        }
+        button.compare-btn {
+            background: #0284c7;
+            border-color: #38bdf8;
+            flex-basis: 100%;
+        }
+        button.compare-btn:hover, button.compare-btn:active {
+            background: #0ea5e9;
+        }
+
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+
+    <!-- Cinematic Red Intro Screen -->
+    <div id="netflix-intro">
+        <div class="netflix-container">
+            <div class="group-text">GROUP 5</div>
+            <div class="nike-slash"></div>
+        </div>
+        <button class="start-enjoy-btn" onclick="startPresentation()">ENJOY</button>
+    </div>
+
+    <div id="header-banner">
+        <h2>Science Project: Group 5 - Tectonic Activities</h2>
+        <p>Interactive 3D Hemispheres • Drag or Swipe to Rotate</p>
+    </div>
+
+    <!-- Popup Info Panel -->
+    <div id="info-panel">
+        <h3 id="info-title">Science Project: Group 5</h3>
+        <p id="info-desc">Click or tap any plate button below to inspect it 1-by-1.</p>
+    </div>
+
+    <!-- Bottom Control Buttons -->
+    <div id="controls">
+        <button class="ctrl-btn compare-btn" onclick="showAllForComparison()">⚖️ Compare Side-by-Side</button>
+        <button class="ctrl-btn" onclick="selectPlate(0)">Plate 1 (Ring of Fire)</button>
+        <button class="ctrl-btn" onclick="selectPlate(1)">Plate 2 (Volcanoes)</button>
+        <button class="ctrl-btn" onclick="selectPlate(2)">Plate 3 (Faults & Trenches)</button>
+    </div>
+
+    <!-- Three.js 3D Library CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Synthesized Audio & Background Space Ambience
+        let audioCtx = null;
+
+        function playCinematicAudioAndAmbience() {
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                const osc1 = audioCtx.createOscillator();
+                const gain1 = audioCtx.createGain();
+                osc1.type = 'sawtooth';
+                osc1.frequency.setValueAtTime(60, audioCtx.currentTime);
+                osc1.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.5);
+                
+                gain1.gain.setValueAtTime(0.6, audioCtx.currentTime);
+                gain1.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+                
+                osc1.connect(gain1);
+                gain1.connect(audioCtx.destination);
+                osc1.start();
+                osc1.stop(audioCtx.currentTime + 0.6);
+
+                setTimeout(() => {
+                    const osc2 = audioCtx.createOscillator();
+                    const gain2 = audioCtx.createGain();
+                    osc2.type = 'triangle';
+                    osc2.frequency.setValueAtTime(120, audioCtx.currentTime);
+                    osc2.frequency.exponentialRampToValueAtTime(240, audioCtx.currentTime + 0.8);
+                    
+                    gain2.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.9);
+                    
+                    osc2.connect(gain2);
+                    gain2.connect(audioCtx.destination);
+                    osc2.start();
+                    osc2.stop(audioCtx.currentTime + 0.9);
+                }, 250);
+
+                setTimeout(() => {
+                    const ambientOsc = audioCtx.createOscillator();
+                    const ambientGain = audioCtx.createGain();
+                    ambientOsc.type = 'sine';
+                    ambientOsc.frequency.setValueAtTime(45, audioCtx.currentTime);
+                    ambientGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+                    ambientGain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 3.0);
+                    ambientOsc.connect(ambientGain);
+                    ambientGain.connect(audioCtx.destination);
+                    ambientOsc.start();
+                }, 1000);
+
+            } catch(e) {
+                console.log("Audio initialized");
+            }
+        }
+
+        // Plate Descriptions Data
+        const plateData = [
+            {
+                title: "Plate 1: The Pacific Ring of Fire",
+                desc: "The Pacific Ring of Fire is a major area in the basin of the Pacific Ocean where many earthquakes and volcanic eruptions occur. It features a horseshoe-shaped belt associated with continuous seismic activity and subduction zones."
+            },
+            {
+                title: "Plate 2: Volcano Distribution",
+                desc: "The Philippines sits directly upon active subduction zones, resulting in high concentrations of stratovolcanoes. Magma rises through crustal fractures, forming active volcanic chains across the archipelago."
+            },
+            {
+                title: "Plate 3: Trenches & Fault Lines",
+                desc: "Characterized by deep oceanic trenches (such as the Philippine Trench) and major fault systems like the Philippine Fault Zone, accommodating intense tectonic convergence pressure."
+            }
+        ];
+
+        function startPresentation() {
+            playCinematicAudioAndAmbience();
+            const intro = document.getElementById('netflix-intro');
+            intro.style.opacity = '0';
+            setTimeout(() => { 
+                intro.style.display = 'none'; 
+                document.getElementById('info-panel').style.display = 'block';
+                selectPlate(0);
+            }, 1000);
+        }
+
+        // 1. Scene, Camera, & WebGL Renderer Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 6.0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.body.appendChild(renderer.domElement);
+
+        // 2. Lighting Setup
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+        directionalLight.position.set(5, 3, 5);
+        scene.add(directionalLight);
+
+        // 3. Master Container Group for Rotations
+        const masterGroup = new THREE.Group();
+        scene.add(masterGroup);
+
+        const hemiGeometry = new THREE.SphereGeometry(1.3, 64, 32, 0, Math.PI, 0, Math.PI);
+        const textureLoader = new THREE.TextureLoader();
+
+        const textures = [
+            textureLoader.load('img/plate1.jpg.jpeg', undefined, undefined, () => {}),
+            textureLoader.load('img/plate2.jpg.jpeg', undefined, undefined, () => {}),
+            textureLoader.load('img/plate3.jpg.jpeg', undefined, undefined, () => {})
+        ];
+
+        const plates = [];
+        const xPositions = [-2.5, 0.0, 2.5];
+
+        textures.forEach((tex, index) => {
+            const mat = new THREE.MeshStandardMaterial({ 
+                map: tex,
+                roughness: 0.3,
+                metalness: 0.1,
+                side: THREE.DoubleSide
+            });
+            const mesh = new THREE.Mesh(hemiGeometry, mat);
+            mesh.position.x = xPositions[index];
+            mesh.rotation.y = -Math.PI / 2;
+            masterGroup.add(mesh);
+            plates.push(mesh);
+        });
+
+        // 4. Selection & Comparison Functions
+        function showAllForComparison() {
+            plates.forEach((p, idx) => {
+                p.visible = true;
+                p.position.x = xPositions[idx];
+                p.scale.set(0.9, 0.9, 0.9);
+            });
+            document.getElementById('info-title').innerText = "Side-by-Side Comparison Mode";
+            document.getElementById('info-desc').innerText = "Comparing all three tectonic layers simultaneously to analyze patterns across the Philippine and Pacific plate boundaries.";
+        }
+
+        function selectPlate(index) {
+            plates.forEach((p, idx) => {
+                if (idx === index) {
+                    p.visible = true;
+                    p.position.x = 0;
+                    p.scale.set(1.3, 1.3, 1.3);
+                } else {
+                    p.visible = false;
+                }
+            });
+            document.getElementById('info-title').innerText = plateData[index].title;
+            document.getElementById('info-desc').innerText = plateData[index].desc;
+        }
+
+        // 5. Universal Mouse & Touch Rotation Controls
+        let isDragging = false;
+        let previousPosition = { x: 0, y: 0 };
+
+        function onPointerDown(x, y) {
+            isDragging = true;
+            previousPosition = { x: x, y: y };
+        }
+
+        function onPointerMove(x, y) {
+            if (!isDragging) return;
+
+            const deltaX = x - previousPosition.x;
+            const deltaY = y - previousPosition.y;
+
+            masterGroup.rotation.y += deltaX * 0.008;
+            masterGroup.rotation.x += deltaY * 0.008;
+
+            previousPosition = { x: x, y: y };
+        }
+
+        function onPointerUp() {
+            isDragging = false;
+        }
+
+        // Mouse Listeners
+        window.addEventListener('mousedown', (e) => onPointerDown(e.clientX, e.clientY));
+        window.addEventListener('mousemove', (e) => onPointerMove(e.clientX, e.clientY));
+        window.addEventListener('mouseup', onPointerUp);
+
+        // Touch Listeners for Mobile / Tablets
+        window.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                onPointerDown(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1) {
+                onPointerMove(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchend', onPointerUp);
+
+        // 6. Window Resizing Handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // 7. Clean Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
